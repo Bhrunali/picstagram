@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+{% load bootstrap3 %}
+{% block content %}
+  <form method="POST" class="post-form">
+    {% csrf_token %}
+     {{ form.as_p }}
+     <button type="submit" >Sign in</button>
+
+
+  </form>
+
+{% endblock %}

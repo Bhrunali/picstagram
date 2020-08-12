@@ -1,0 +1,48 @@
+{% extends 'pics/base.html' %}
+{% block content %}
+    <div class="updating">
+        <div class="row">
+            <div class="card3">
+                <div class="column">
+                    <div class="uplodingprofile">
+                            <div class="Profile_image2">
+                                {% if profile.profile_pic %}
+                                    <h4><img src="{{ profile.profile_pic.url }}" height="50" width="50">{{ profile.Name }}</h4>
+                                    <h6><a href="{% url 'pics:dp_change' pk=profile.pk %}">Change Profile Picture</a> </h6>
+                                {% endif %}
+                            </div>
+
+                        <form method="POST" class="profile_form" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <img src="{{STATIC_URL}}{{profile.image.value}}">
+
+                            <button type="submit" class="save btn btn-default" >Submit</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="column1">
+                    <h3>Edit Profile</h3>
+                    <ul class="listo">
+                        <li>Change Password</li>
+
+                        <li>Apps and Websites</li>
+
+                        <li>Email and SMS</li>
+
+                        <li>Push Notification</li>
+
+                        <li>Manage Contacts</li>
+
+                        <li>Privacy and Security</li>
+
+                        <li>Login Activity</li>
+                        <li> Emails From Instagram</li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

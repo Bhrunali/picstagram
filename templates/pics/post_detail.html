@@ -1,0 +1,44 @@
+{% extends 'pics/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="row">
+        <div class="column">
+
+            <div class="post_image" id="imagepost">
+                {% if post.image %}
+                    <img src="{{ post.image.url }}">
+                {% endif %}
+
+            </div>
+
+        </div>
+        <div class="column">
+               <div class="card_header">
+                    {% for profile in profilo %}
+                        <div class="Profile_image">
+                            {% if profile.profile_pic %}
+                                <img src="{{ profile.profile_pic.url }}">
+                            {% endif %}
+                        </div>
+                        <div class="post_info">
+                            <div class="post_name">{{ profile.user }}</div>
+                        </div>
+                        <div class="post_options"><i class="fa fa-ellipsis-h" href="/"></i>
+                        </div>
+                    {% endfor %}
+                </div>
+         <div class="caption">
+                    <a href=""><h2>{{ post.username }}</h2>
+                        <span>{{ post.image_caption }}</span>
+
+                    </a>
+                </div>
+                <div class="time_posted">
+
+                    {{ post.date|timesince }} ago
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

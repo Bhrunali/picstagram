@@ -1,0 +1,30 @@
+{% extends 'pics/base.html' %}
+{% block content %}
+    <div class="uploading">
+        <div class="Card2">
+         <div class="card_header1">
+             <a class="arrowback" href="{% url 'home' %}"><i class="fa fa-arrow-left"></i></a>
+
+             <h1 style="font-family: 'Galada', cursive "><b>New Post </b></h1>
+         </div>
+            <div class="uploaded_form">
+                {% for profile in profilo %}
+
+                    <div class="Profile_image1">
+                        {% if profile.profile_pic %}
+                            <img src="{{ profile.profile_pic.url }}" height=200 width=200>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <form method="POST" enctype="multipart/form-data" class="pic_form">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <img src="{{ MEDIA_URL }}{{ image }}">
+
+                    <button type="submit" class="save btn btn-primary">Upload</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

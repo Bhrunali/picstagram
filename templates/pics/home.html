@@ -1,0 +1,80 @@
+{% extends 'pics/base.html' %}
+{% block content %}
+    <div class="centerstage">
+        {% for post in posts %}
+            <div class="card">
+
+                <div class="card_header">
+                    {% for profile in profilo %}
+                        <div class="Profile_image">
+                            {% if profile.profile_pic %}
+                                <div class="post_info">
+                                    <img src="{{ profile.profile_pic.url }}"> {{ profile.user }}
+                                </div>
+                                <div class="post_options">
+                                    <button type="button" class="fa fa-ellipsis-h" data-toggle="modal"
+                                            data-target="#mymodal"></button>
+                                    <div class="modal fade" id="myModal" role="dialog">
+                                        <div class="modal-dialog">
+
+                                            <!-- Modal content-->
+
+                                            <div class="modal-body">
+                                                <ul class="editing">
+
+                                                    <li>1</li>
+                                                    <li>1</li>
+                                                    <li>1</li>
+                                                    <li>1</li>
+                                                    <li>1</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    {% endfor %}
+
+                <div class="post_image" id="imagepost">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}">
+                    {% endif %}
+
+                </div>
+
+                <div class="engagement">
+                    <a href="/"><i class="fa fa-heart-o"></i></a>
+                    <a href="/"><i class="fa fa-comment-o"></i></a>
+                    <a href="/"><i class="fa fa-paper-plane-o"></i></a>
+                    <a href="/"><i class="fa fa-bookmark-o"></i></a>
+                </div>
+                <div class="likes">
+                    <a href="/">145 likes</a>
+                </div>
+                <div class="caption">
+                    <a href=""><h2>{{ post.username }}</h2>
+                        <span id="caption">{{ post.image_caption }} </span>
+
+                    </a>
+                </div>
+                <div class="time_posted">
+
+                    {{ post.date|timesince }} ago
+                </div>
+                <div class="instagram-card-footer">
+
+                    <input class="comments-input" type="text" placeholder="Add a comment"/>
+                    <a class="footer-action-icons" href="{% url 'home' %}">Post</a>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+
+
+{% endblock %}
+

@@ -1,0 +1,101 @@
+from django.views.generic import (TemplateView, CreateView, ListView, UpdateView, DetailView, FormView)
+from django.contrib.auth.models import User, auth
+
+from pics.forms import UserCreationForm, UserInfoForm, PostForm
+from pics.models import Profile, Post
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, render, get_object_or_404, reverse
+
+from django.urls import reverse_lazy
+from pics.forms import userForm
+
+
+class SignUp(CreateView):
+    form_class = userForm
+    template_name = 'pics/signup.html'
+    success_url = reverse_lazy('login')
+
+
+class LoginPage(TemplateView):
+    template_name = 'pics/login_signup_page.html'
+
+
+class UploadPage(CreateView, LoginRequiredMixin):
+    login_url = '/login/'
+    model = Post
+    form_class = PostForm
+    template_name = 'pics/upload_form.html'
+    success_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super(UploadPage, self).get_context_data(**kwargs)
+        context['profilo'] = Profile.objects.all().order_by('-date')
+        # Add any other variables to the context here
+        ...
+        return context
+
+
+@login_required
+def post_publish(request):
+    Post.uploadPost()
+    return redirect('home')
+
+
+class ProfilePage(FormView, LoginRequiredMixin):
+    login_url = '/login/'
+    model = Profile
+    form_class = UserInfoForm
+    template_name = 'pics/user_form_page.html'
+    success_url = reverse_lazy('pics:user')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    @login_required
+    def profile_publish(request):
+        Profile.save_profile()
+        return redirect('pics:user')
+
+
+class ProfilePageUpdate(UpdateView, LoginRequiredMixin):
+    login_url = '/login/'
+    model = Profile
+    context_object_name = 'profilo'
+    form_class = UserInfoForm
+    template_name = 'pics/user_form_page.html'
+
+
+class UserPage(ListView, LoginRequiredMixin):
+    login_url = '/login/'
+    queryset = Profile.objects.all()
+    context_object_name = 'profilo'
+    model = Profile
+    template_name = 'pics/user.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserPage, self).get_context_data(**kwargs)
+        context['posts'] = Post.objects.all().order_by('-date')
+
+        return context
+
+    def get_queryset(self):
+        return Profile.objects.filter(date__lte=timezone.now()).order_by('-date')
+
+
+class HomePage(ListView, LoginRequiredMixin):
+    login_url = '/login/'
+    queryset = Post.objects.all()
+    context_object_name = 'posts'
+    model = Post
+    template_name = 'pics/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(HomePage, self).get_context_data(**kwargs)
+        context['profilo'] = Profile.objects.all().order_by('-date')
+
+        return context
+
+    def get_queryset(self):
+        return Post.objects.filter(date__lte=timezone.now()).order_by('-date')
